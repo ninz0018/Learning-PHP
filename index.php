@@ -9,26 +9,72 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <title>PHP Learning</title>
 </head>
 <body>
     <main>
-        <div class="d-flex justify-content-center align-items-center">     
-        <form action="includes/formdata.php" method="post">
-            <label for="username">Username</label><br>
-            <input type="text" name="username" placeholder="Enter Username" id="username"><br><br>
-            <label for="password">Password</label><br>
-            <input type="text" name="password" placeholder="Enter Password" id="password"> <br><br>
-            <label for="selectcar">Select Color</label><br>
-            <select name="selectcar" id="selectcar">
-                <option value="Nothing Selected" Selected>Select Color</option>
-                <option value="red">Red</option>
-                <option value="blue">Blue</option>
-                <option value="Yellow">Yellow</option>
-            </select><br><br>
-            <button class="btn btn-primary rounded" type="submit">Submit</button>
-        </form>
-        </div>
+       <div>
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                <label for="num1">CALCULATOR</label><br>
+                <input type="number" placeholder="Enter Number" name="numb1" id="numb1">
+                <select name="operator" id="operator">
+                    <option value="add">+</option>
+                    <option value="subtract">-</option>
+                    <option value="multiply">*</option>
+                    <option value="divide">/</option>
+                </select>
+                <input type="number" name="numb2" placeholder="Enter Number" id="numb2"><br><br>
+                <button class="rounded btn btn-primary">CALCULATE</button>
+            </form>
+
+            <?php
+                if($_SERVER["REQUEST_METHOD"] == "POST") {
+                    $num1 = filter_input(INPUT_POST,"numb1", FILTER_SANITIZE_NUMBER_FLOAT);
+                    $num2 = filter_input(INPUT_POST,"numb2",FILTER_SANITIZE_NUMBER_FLOAT);
+                    $oper = htmlspecialchars($_POST["operator"]);
+
+                    $error = false;
+
+                    if(empty($num1) or empty($num2)) {
+                        echo "<p>Fill the blank!!</p>";
+                        $error = true;
+                    }
+
+                    if (!is_numeric($num1) or !is_numeric($num2) ){
+                        echo "<p>Input Number only!! </p>";
+                        $error = true;
+                    }
+
+                    if(!$error){
+                        $value = 0;
+                        switch ($oper) {
+                            case 'add':
+                                # code...
+                                $value = $num1 + $num2;
+                                break;
+                            case 'subtract':
+                                # code...
+                                $value = $num1 - $num2;
+                                break;
+                            case 'multiply':
+                                # code...
+                                $value = $num1 * $num2;
+                                break;
+                            case 'divide':
+                                # code...
+                                $value = $num1 / $num2;
+                                break;
+                            default:
+                                # code...
+                                break;
+                        }
+
+                        echo "<p class=`calc`> Results:" . $value . "</p>";
+                    }
+                }
+            ?>
+       </div>
     </main>
 </body>
 </html>
